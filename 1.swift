@@ -1,7 +1,7 @@
 //https://swiftlang.ng.bluemix.net/#/repl/47793293ac40e090d0c043dd223d5a299c20a435bde7c402aab899ade65d2967
 
 // Algebraic Data Types, Compilers and Swift
-// Programming Exercise One:
+// Programming Exercise One Solution:
 // Sum ADT
 
 
@@ -27,14 +27,16 @@ enum Sum: Evaluable {
 
     func eval() -> Int {
         switch self {
-            // TODO: Handle Add case
-            // TODO: Handle Minus case
+
+        case .Add(let sum, let value):
+            return sum.eval() + value.eval()
+
+        case .Minus(let sum, let value):
+            return sum.eval() - value.eval()
 
         case .AtomShortcut(let atom):
             return atom.eval()
 
-        default:
-            return 42
         }
     }
 }

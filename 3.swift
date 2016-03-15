@@ -1,7 +1,7 @@
 //https://swiftlang.ng.bluemix.net/#/repl/78a67a19fa832392df809e7adbaec05deefbbb5988260df9ae445da38832fe72
 
 // Algebraic Data Types, Compilers and Swift
-// Programming Exercise Three:
+// Programming Exercise Three Solution:
 // Errors and Enviroments
 
 
@@ -24,10 +24,12 @@ enum Atom: Evaluable {
         switch self {
         case .Number(let number):
             return number
-
-        // TODO: Handle Variable case
-        // TODO: Throw UndefinedVariable if variable is not found
-        // TODO: Throw DivisionByZero when division by zero occurs
+        case Variable(let name):
+            if let val = env[name] {
+                return val
+            } else {
+                throw CompilerError.UndefinedVariable(name)
+            }
         default:
             return 42
         }
@@ -47,7 +49,7 @@ enum Product: Evaluable {
         case .Division(let lhs, let rhs):
             switch rhs {
             case .Number(let number) where number == 0:
-                return -1
+                throw CompilerError.DivisionByZero
             default:
                 return try lhs.eval(env) / rhs.eval(env)
             }

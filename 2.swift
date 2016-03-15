@@ -27,12 +27,21 @@ enum Product: Evaluable {
 
     func eval() -> Int {
         switch self {
-        // TODO: Handle Multiplication case
-        // TODO: Handle Division case
-        // TODO: Handle Division where rhs == 0 special case
-        // TODO: Handle AtomShortcut case
-        default:
-            return 42
+        case .Multiplication(let lhs, let rhs):
+            return lhs.eval() * rhs.eval()
+        case .Division(let lhs, let rhs):
+            switch rhs {
+                case .Number(let v) where v == 0:
+                    return -1
+                default:
+                    return lhs.eval() / rhs.eval()
+            }
+        // case .Division(let lhs, let rhs) where rhs.eval() == 0:
+        //     return -1
+        // case .Division(let lhs, let rhs):
+        //     return lhs.eval() / rhs.eval()
+        case .AtomShortcut(let atom):
+            return atom.eval()
         }
     }
 }

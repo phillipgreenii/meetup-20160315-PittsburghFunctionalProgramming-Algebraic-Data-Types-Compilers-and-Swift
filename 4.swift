@@ -1,7 +1,7 @@
 //https://swiftlang.ng.bluemix.net/#/repl/5ad33a7037f5e3e17ce3dbbf40cd99c86773ff0af5c6521cf19e262cfb267c6f
 
 // Algebraic Data Types, Compilers and Swift
-// Programming Exercise Four:
+// Programming Exercise Four Solution:
 // Statement
 
 
@@ -95,12 +95,17 @@ enum Statement {
     func eval(env:Env) throws -> Env {
         switch self {
         case .Chain(let statOne, let statTwo):
-            // TODO: Fix Chain case
-            return ["": 0]
+            let e = try statOne.eval(env)
+            return try statTwo.eval(e)
 
         case .Assign(let identifier, let stat):
-            // TODO: Fix Assign case
-            return ["": 0]
+            let r = try stat.eval(env)
+            if let v = r["output"]{
+                return [identifier: v]
+            }
+            else {
+                throw CompilerError.UndefinedVariable(identifier)
+            }
 
         case .SumShortcut(let sum):
             return ["output": try sum.eval(env)]
